@@ -545,8 +545,17 @@ class shopProductsCollection
         }
 
         if (waRequest::param('drop_out_of_stock') == 2) { 
-            $this->where[] = '(p.count > 0 || p.count IS NULL)';
+           // $this->where[] = '(p.count > 0 || p.count IS NULL)';
         }
+
+        $this->where[] = "(p.count > 0 OR p.count IS NULL OR EXISTS (
+            SELECT 1
+            FROM shop_product_features spf
+            JOIN shop_feature sf ON sf.id = spf.feature_id
+            WHERE sf.code = 'pod_zakaz'
+            AND spf.product_id = p.id
+            AND spf.feature_value_id = 1
+        ))";
 
         $this->where[] = 'p.status = 1';
     }
