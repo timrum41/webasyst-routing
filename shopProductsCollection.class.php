@@ -767,12 +767,25 @@ SQL;
 
                     } else {
                         $this->filtered_by_features[$feature_id] = $values;
+                        /*
                         $where = ":table.feature_id = $feature_id AND :table.feature_value_id IN ($imploded_values)";
                         $on = ":table.product_id = p.id";
                         if (!empty($skus_alias)) {
                             $on .= " AND (:table.sku_id IS NULL OR :table.sku_id = $skus_alias.id)";
                         }
                         $this->addJoin('shop_product_features', "($on)", $where);
+                        */
+                        $this->where[] = "EXISTS (
+                            SELECT 1 
+                            FROM shop_product_features pf
+                            JOIN shop_product_skus s ON s.id = pf.sku_id
+                            WHERE pf.product_id = p.id
+                              AND pf.feature_id = {$feature_id}
+                              AND pf.feature_value_id IN ({$imploded_values})
+                              AND (s.count IS NULL OR s.count > 0)
+                              AND s.available > 0
+                              AND s.status > 0
+                        )";
                     }
                     $this->group_by = 'p.id';
                 } else {
