@@ -1,9 +1,38 @@
 <?php
+
+$api_rules = [
+    'api/v1/shop/?' => 'frontend/apiShop',
+    'api/v1/promos/?' => 'frontend/apiPromos',
+    'api/v1/countries/?' => 'frontend/apiCountries',
+    'api/v1/shipping/list/?' => 'frontend/apiShippingList',
+    'api/v1/shipping/costs/?' => 'frontend/apiShippingCosts',
+    'api/v1/customer_token/?' => 'frontend/apiCustomerToken',
+    'api/v1/order/calculate/?' => 'frontend/apiOrderCalculate',
+    'api/v1/order/create/?' => 'frontend/apiOrderCreate',
+    'api/v1/order/<order_id:\d+>/payment/?' => 'frontend/apiOrderPayment',
+    'api/v1/order/<order_id:\d+>/payment/list/?' => 'frontend/apiOrderPaymentList',
+    'api/v1/order/<order_id:\d+>/?' => 'frontend/apiOrder',
+    'api/v1/cart/?' => 'frontend/apiCart',
+    'api/v1/category/<category_id:\d+>/products/?'                          => 'frontend/apiProductsSearch',
+    'api/v1/set/<set_id:[^/]+>/products/?'                                  => 'frontend/apiProductsSearch',
+    'api/v1/tag/<tag_id:[^/]+>/products/?'                                  => 'frontend/apiProductsSearch',
+    'api/v1/products/<product_ids:[\d,]+>/?'                                => 'frontend/apiProductsSearch',
+    'api/v1/products/search/?'                                              => 'frontend/apiProductsSearch',
+    'api/v1/product/<product_id_cross_selling:\d+>/related/cross_selling/?' => 'frontend/apiProductsSearch',
+    'api/v1/product/<product_id_upselling:\d+>/related/upselling/?'         => 'frontend/apiProductsSearch',
+    'api/v1/product/<id>/reviews/add/?' => 'frontend/apiProductReviewAdd',
+    'api/v1/product/<id>/reviews/?' => 'frontend/apiProductReviews',
+    'api/v1/product/<id>/?' => 'frontend/apiProduct',
+    'api/v1/categories/?' => 'frontend/apiCategories',
+    'api/swagger/v<api_version_number:[\d]+>.yaml' => 'frontend/apiYaml',
+    'api/v1/*' => 'frontend/apiErr404',
+];
+
 return array(
     // default
     // url to category: /category/categoryurl/
     // url to product: /producturl/
-    0 => array(
+    0 => $api_rules + array(
         '' => 'frontend/',
         'login/' => 'login/',
         'forgotpassword/' => 'forgotpassword/',
@@ -15,9 +44,10 @@ return array(
         'data/shipping/' => 'frontend/shipping',
         'cart/' => 'frontend/cart',
         'checkout/' => 'frontend/checkout',
+        'checkout/success/payment/?' => 'frontend/checkoutSuccessPaymentSelection',
         'checkout/<step:[^/]+>/?' => 'frontend/checkout',
         'cart/<action:add|save|delete>/' => 'frontendCart',
-        'order/cart/<action:get|add|save|render|productdialog>/?' => 'frontendOrderCart',
+        'order/cart/<action:get|add|save|render|productdialog|customertoken>/?' => 'frontendOrderCart',
         'order/confirmation/<action:>/' => 'frontendOrderConfirmation',
         'order/<action:>/' => 'frontendOrder',
         'order/' => 'frontend/order',
@@ -26,6 +56,7 @@ return array(
         'tag/<tag>/' => 'frontend/tag',
         'category/<category_url>/' => 'frontend/category',
         'buybuttons/' => 'frontend/buybuttons',
+        'pickup/<action:>/?' => 'frontendPickup',
         'my/order/<id>/<code>/print/<form_type:(payment|shipping|form)>/<form_id>/?' => 'frontend/myOrderPrintform',
         'my/order/<id>/print/<form_type:(payment|shipping|form)>/<form_id>/?' => 'frontend/myOrderPrintform',
         'my/order/<id>/download/<code>/<item>/?' => 'frontend/myOrderDownload',
@@ -57,7 +88,6 @@ return array(
         'secure' => true,
         ),
 
-
         'my/?' => array(
             'module' => 'frontend',
             'action' => 'my',
@@ -69,7 +99,7 @@ return array(
         '<product_url:[^/]+>/' => 'frontend/product',
     ),
 
-    1 => array(
+    1 => $api_rules + array(
         '' => 'frontend/',
         'login/' => 'login/',
         'forgotpassword/' => 'forgotpassword/',
@@ -81,9 +111,10 @@ return array(
         'data/shipping/' => 'frontend/shipping',
         'cart/' => 'frontend/cart',
         'checkout/' => 'frontend/checkout',
+        'checkout/success/payment/?' => 'frontend/checkoutSuccessPaymentSelection',
         'checkout/<step:[^/]+>/?' => 'frontend/checkout',
         'cart/<action:add|save|delete>/' => 'frontendCart',
-        'order/cart/<action:get|add|save|render|productdialog>/?' => 'frontendOrderCart',
+        'order/cart/<action:get|add|save|render|productdialog|customertoken>/?' => 'frontendOrderCart',
         'order/confirmation/<action:>/' => 'frontendOrderConfirmation',
         'order/<action:>/' => 'frontendOrder',
         'order/' => 'frontend/order',
@@ -92,6 +123,7 @@ return array(
         'tag/<tag>/' => 'frontend/tag',
         'category/<category_url>/' => 'frontend/category',
         'buybuttons/' => 'frontend/buybuttons',
+        'pickup/<action:>/?' => 'frontendPickup',
         'my/order/<id>/<code>/print/<form_type:(payment|shipping|form)>/<form_id>/?' => 'frontend/myOrderPrintform',
         'my/order/<id>/print/<form_type:(payment|shipping|form)>/<form_id>/?' => 'frontend/myOrderPrintform',
         'my/order/<id>/download/<code>/<item>/?' => 'frontend/myOrderDownload',
@@ -120,13 +152,12 @@ return array(
             'secure' => true,
         ),
 
-		'my/bonus/?' => array(      // <-- добавить
+        'my/bonus/?' => array(      // <-- добавить
 		'url'    => 'my/bonus/?',
 		'module' => 'frontend',
 		'action' => 'myBonus',
 		'secure' => true,
 	    ),
-
 
         'my/?' => array(
             'url' => 'my/?',
@@ -140,7 +171,7 @@ return array(
         'product/<product_url:[^/]+>/' => 'frontend/product',
     ),
 
-    2 => array(
+    2 => $api_rules + array(
         '' => 'frontend/',
         'login/' => 'login/',
         'forgotpassword/' => 'forgotpassword/',
@@ -152,9 +183,10 @@ return array(
         'data/shipping/' => 'frontend/shipping',
         'cart/' => 'frontend/cart',
         'checkout/' => 'frontend/checkout',
+        'checkout/success/payment/?' => 'frontend/checkoutSuccessPaymentSelection',
         'checkout/<step:[^/]+>/?' => 'frontend/checkout',
         'cart/<action:add|save|delete>/' => 'frontendCart',
-        'order/cart/<action:get|add|save|render|productdialog>/?' => 'frontendOrderCart',
+        'order/cart/<action:get|add|save|render|productdialog|customertoken>/?' => 'frontendOrderCart',
         'order/confirmation/<action:>/' => 'frontendOrderConfirmation',
         'order/<action:>/' => 'frontendOrder',
         'order/' => 'frontend/order',
@@ -162,6 +194,7 @@ return array(
         'compare/<id:[\d,]+>/' => 'frontend/compare',
         'tag/<tag>/' => 'frontend/tag',
         'buybuttons/' => 'frontend/buybuttons',
+        'pickup/<action:>/?' => 'frontendPickup',
         'my/order/<id>/<code>/print/<form_type:(payment|shipping|form)>/<form_id>/?' => 'frontend/myOrderPrintform',
         'my/order/<id>/print/<form_type:(payment|shipping|form)>/<form_id>/?' => 'frontend/myOrderPrintform',
         'my/order/<id>/download/<code>/<item>/?' => 'frontend/myOrderDownload',
@@ -190,14 +223,12 @@ return array(
             'secure' => true,
         ),
 
-
-		'my/bonus/?' => array(    // <-- добавить
+        'my/bonus/?' => array(    // <-- добавить
 			'url'    => 'my/bonus/?',
 			'module' => 'frontend',
 			'action' => 'myBonus',
 			'secure' => true,
 		),
-
 
         'my/?' => array(
             'url' => 'my/?',
@@ -211,5 +242,7 @@ return array(
         '<category_url>/<product_url:[^/]+>/' => 'frontend/product',
         '<category_url>/<product_url:[^/]+>/<page_url>/' => 'frontend/productPage',
         '<category_url>/' => 'frontend/category',
-    )
+    ),
+    3 => $api_rules + [
+    ],
 );
